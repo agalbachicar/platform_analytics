@@ -19,6 +19,8 @@ class WarehouseManager:
       self._w.graph().nodes[n]['agents'] = [agent]
       self._unassigned_agents.append(agent)
 
+    self._assigned_tasks = []
+
   def warehouse(self):
     return self._w
 
@@ -27,6 +29,9 @@ class WarehouseManager:
 
   def assigned_agents(self):
     return self._assigned_agents
+
+  def assigned_tasks(self):
+    return self._assigned_tasks
 
   def unassigned_agents(self):
     return self._unassigned_agents
@@ -48,10 +53,12 @@ class WarehouseManager:
 
     self._unassigned_agents.remove(agent_path_bet[0])
     self._assigned_agents.append(agent_path_bet[0])
-    self._utilitarian_cost += agent_path_bet[1]['cost']
 
     agent_path_bet[0].assign_mission(agent_path_bet[1]['path'])
 
+    self._update_weights()
+
+    self._assigned_tasks.append((agent_path_bet[0].name(), [agent_path_bet[0].pos()] + agent_path_bet[1]['path']))
     return True
 
   def tick(self):
@@ -59,6 +66,7 @@ class WarehouseManager:
       agent.tick(self._w)  
     self._unassigned_agents = self._unassigned_agents + [agent for agent in self._assigned_agents if not agent.is_assigned()]
     self._assigned_agents = [agent for agent in self._assigned_agents if agent.is_assigned()]
+    self._update_cost()
     self._update_weights()
 
   def _update_weights(self):
@@ -68,6 +76,11 @@ class WarehouseManager:
     for agent in self._assigned_agents:
       edge = agent.next_move()
       if not edge: self._w.increase_edge_occupancy(edge)
+
+  def _update_cost(self):
+    for e in self._w.graph().edges:
+      if self._w.graph().edges[e]['occupancy'] > 0:
+        self._utilitarian_cost += self._w.get_edge_cost(*e)
 
   def _agent_name(i):
     return 'a_{}'.format(i)
@@ -80,7 +93,6 @@ class WarehouseManager:
         cost = v['cost']
         key = k
     return k, agent_path_bets[k]
-
 
 
 if __name__ == '__main__':
@@ -107,3 +119,5 @@ if __name__ == '__main__':
 
   print('- Assigned agents: {}'.format(warehouse_manager.assigned_agents()))
   print('- Unassigned agents: {}'.format(warehouse_manager.unassigned_agents()))
+
+  print('- Assigned tasks: {}'.format(warehouse_manager.assigned_tasks()))

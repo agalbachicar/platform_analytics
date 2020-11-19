@@ -2,7 +2,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 class Warehouse:
-  def __init__(self, rows, cols, node_capacity, edge_base_cost=1., occupancy_cost=0.):
+  def __init__(self, rows, cols, node_capacity=-1, edge_base_cost=1., occupancy_cost=0.):
     self._rows = rows
     self._cols = cols
     self._edge_base_cost = edge_base_cost

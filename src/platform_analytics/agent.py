@@ -6,7 +6,6 @@ class Agent:
     self._name = name
     self._pos = pos
     self._acc_cost = 0
-    self._is_assigned = False
     self._path = []
 
   def name(self):
@@ -30,17 +29,16 @@ class Agent:
     return path
 
   def is_assigned(self):
-    return self._is_assigned
+    return False if not self._path else True
 
   def assign_mission(self, path):
     self._path = path
-    self._is_assigned = True
 
   def cost(self):
     return self._acc_cost
 
   def tick(self, w):
-    if self._is_assigned:
+    if self.is_assigned():
       # Computes the step cost
       p_s = self._pos
       p_f = self._path.pop(0)
@@ -49,8 +47,9 @@ class Agent:
       self._acc_cost += step_cost
       # Updates the position
       self._pos = p_f
-      # Verifies the assignment state
-      if not self._path: self._is_assigned = False
+
+  def __repr__(self):
+    return '[name: {}, position: {}, is_assigned: {}, path: {}, acc_cost:{}]'.format(self._name, self._pos, self.is_assigned(), self._path, self._acc_cost)
 
 if __name__ == "__main__":
   ROWS=4

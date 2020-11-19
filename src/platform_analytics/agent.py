@@ -14,19 +14,15 @@ class Agent:
   def pos(self):
     return self._pos
 
-  def path_to(self, nodes, w):
+  def path_and_cost_to(self, node, w):
     class WeightFn:
       def __init__(self, w):
         self._w = w
       def __call__(self, u, v, d):
-        return w.get_edge_weight(u, v)
-
-    path = []
-    nn = [self._pos] + nodes
+        return w.get_edge_cost(u, v)
     weight_fn = WeightFn(w)
-    for i in range(0, len(nn)-1):
-      path = path + nx.dijkstra_path(w.graph(), nn[i], nn[i+1], weight=weight_fn)[1:]
-    return path
+    path = nx.dijkstra_path(w.graph(), self._pos, node, weight=weight_fn)
+    return path[1:], w.path_cost(path)
 
   def is_assigned(self):
     return False if not self._path else True
@@ -37,12 +33,15 @@ class Agent:
   def cost(self):
     return self._acc_cost
 
+  def next_move(self):
+    return (self._pos, self._path[0]) if self.is_assigned() else None
+
   def tick(self, w):
     if self.is_assigned():
       # Computes the step cost
       p_s = self._pos
       p_f = self._path.pop(0)
-      step_cost = w.get_edge_weight(p_s, p_f)
+      step_cost = w.get_edge_cost(p_s, p_f)
       # Updates the total cost
       self._acc_cost += step_cost
       # Updates the position
@@ -59,9 +58,9 @@ if __name__ == "__main__":
   n_0 = '1_1'
   agent = Agent('dut', '1_1')
   print('Agent {} is at <{}>'.format(agent.name(), agent.pos()))
-  target = ['2_7']
-  path = agent.path_to(target, w)
-  print('Proposed path to <{}>: {}'.format(target[0], path))
+  target = '2_7'
+  path, cost = agent.path_and_cost_to(target, w)
+  print('Proposed path to <{}>: {}. Cost: {}'.format(target, path, cost))
   agent.assign_mission(path)
   i = 0
   while agent.is_assigned():

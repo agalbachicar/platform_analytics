@@ -41,8 +41,9 @@ class WarehouseManager:
     agent_path_bets = dict()
     for agent in self._unassigned_agents:
       agent_path_bets[agent] = dict()
-      agent_path_bets[agent]['path'] = agent.path_to([task], self._w)
-      agent_path_bets[agent]['cost'] = self._emulate_path_cost_assignment(agent_path_bets[agent]['path']) 
+      path, cost = agent.path_and_cost_to(task, self._w)
+      agent_path_bets[agent]['path'] = path
+      agent_path_bets[agent]['cost'] = cost
     agent_path_bet = WarehouseManager._min_in_agents_path_bet(agent_path_bets)
 
     self._unassigned_agents.remove(agent_path_bet[0])
@@ -60,11 +61,13 @@ class WarehouseManager:
     self._assigned_agents = [agent for agent in self._assigned_agents if agent.is_assigned()]
     self._update_weights()
 
-  def _emulate_path_cost_assignment(self, path):
-    return 0
-
   def _update_weights(self):
-    pass
+    # Clears all edge occupation
+    self._w.clear_edges_occupancy()
+    # Updates traffic based on edge occupation
+    for agent in self._assigned_agents:
+      edge = agent.next_move()
+      if not edge: self._w.increase_edge_occupancy(edge)
 
   def _agent_name(i):
     return 'a_{}'.format(i)
@@ -94,7 +97,7 @@ if __name__ == '__main__':
   print('- Assigned agents: {}'.format(warehouse_manager.assigned_agents()))
   print('- Unassigned agents: {}'.format(warehouse_manager.unassigned_agents()))
 
-  task_result = warehouse_manager.process_task('1_1')
+  task_result = warehouse_manager.process_task('2_3')
   print('Processed task 1_1. Result: {}'.format(task_result))
 
   print('- Assigned agents: {}'.format(warehouse_manager.assigned_agents()))

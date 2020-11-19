@@ -1,4 +1,5 @@
 import sys
+import logging
 
 from agent import Agent
 from warehouse import Warehouse
@@ -19,6 +20,8 @@ class WarehouseManager:
       self._w.graph().nodes[n]['agents'] = [agent]
       self._unassigned_agents.append(agent)
 
+    self._task_assingments = []
+
   def warehouse(self):
     return self._w
 
@@ -28,6 +31,9 @@ class WarehouseManager:
   def assigned_agents(self):
     return self._assigned_agents
 
+  def task_assingments(self):
+    return self._task_assingments
+
   def unassigned_agents(self):
     return self._unassigned_agents
 
@@ -36,29 +42,50 @@ class WarehouseManager:
 
   def process_task(self, task):
     if not self._unassigned_agents:
+      logging.debug('All agents are busy. Try next time...')
       return False
 
+    logging.debug('\t\tComputing agents\' costs for task: {}...'.format(task))
     agent_path_bets = dict()
     for agent in self._unassigned_agents:
       agent_path_bets[agent] = dict()
       path, cost = agent.path_and_cost_to(task, self._w)
       agent_path_bets[agent]['path'] = path
       agent_path_bets[agent]['cost'] = cost
-    agent_path_bet = WarehouseManager._min_in_agents_path_bet(agent_path_bets)
+    logging.debug('\t\tFinished computing agents\' costs.')
 
+    logging.debug('\t\tFinding the best path...')
+    agent_path_bet = WarehouseManager._min_in_agents_path_bet(agent_path_bets)
+    logging.debug('\t\tBest path was found.')
+
+    logging.debug('\t\tUpdate the agent assignment lists.')
     self._unassigned_agents.remove(agent_path_bet[0])
     self._assigned_agents.append(agent_path_bet[0])
-    self._utilitarian_cost += agent_path_bet[1]['cost']
 
+    logging.debug('\t\tAssigns the mission to the agent.')
     agent_path_bet[0].assign_mission(agent_path_bet[1]['path'])
 
+    logging.debug('\t\tUpdate edge costs.')
+    self._update_weights()
+
+    logging.debug('\t\tRecord task solution: {}'.format((agent_path_bet[0].name(), [agent_path_bet[0].pos()] + agent_path_bet[1]['path'])))
+    self._task_assingments.append((agent_path_bet[0].name(), [agent_path_bet[0].pos()] + agent_path_bet[1]['path']))
     return True
 
   def tick(self):
+    logging.debug('\t\tTicking agents...')
     for agent in self._assigned_agents:
-      agent.tick(self._w)  
+      agent.tick(self._w)
+    logging.debug('\t\tFinished agents.')
+
+    logging.debug('\t\tUpdating the assigned and unassigned agent lists...')
     self._unassigned_agents = self._unassigned_agents + [agent for agent in self._assigned_agents if not agent.is_assigned()]
     self._assigned_agents = [agent for agent in self._assigned_agents if agent.is_assigned()]
+
+    logging.debug('\t\tUpdate total costs.')
+    self._update_cost()
+
+    logging.debug('\t\tUpdate edge costs.')
     self._update_weights()
 
   def _update_weights(self):
@@ -67,7 +94,13 @@ class WarehouseManager:
     # Updates traffic based on edge occupation
     for agent in self._assigned_agents:
       edge = agent.next_move()
-      if not edge: self._w.increase_edge_occupancy(edge)
+      if edge: self._w.increase_edge_occupancy(edge)
+
+  def _update_cost(self):
+    logging.debug('\t\tUpdating the assigned and unassigned agent lists...')
+    for e in self._w.graph().edges:
+      if self._w.graph().edges[e]['occupancy'] > 0:
+        self._utilitarian_cost += self._w.get_edge_cost(*e)
 
   def _agent_name(i):
     return 'a_{}'.format(i)
@@ -80,7 +113,6 @@ class WarehouseManager:
         cost = v['cost']
         key = k
     return k, agent_path_bets[k]
-
 
 
 if __name__ == '__main__':
@@ -107,3 +139,5 @@ if __name__ == '__main__':
 
   print('- Assigned agents: {}'.format(warehouse_manager.assigned_agents()))
   print('- Unassigned agents: {}'.format(warehouse_manager.unassigned_agents()))
+
+  print('- Assigned tasks: {}'.format(warehouse_manager.assigned_tasks()))

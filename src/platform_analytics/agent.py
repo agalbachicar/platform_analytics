@@ -5,7 +5,6 @@ class Agent:
   def __init__(self, name, pos):
     self._name = name
     self._pos = pos
-    self._acc_cost = 0
     self._path = []
 
   def name(self):
@@ -30,9 +29,6 @@ class Agent:
   def assign_mission(self, path):
     self._path = path
 
-  def cost(self):
-    return self._acc_cost
-
   def next_move(self):
     return (self._pos, self._path[0]) if self.is_assigned() else None
 
@@ -41,14 +37,11 @@ class Agent:
       # Computes the step cost
       p_s = self._pos
       p_f = self._path.pop(0)
-      step_cost = w.get_edge_cost(p_s, p_f)
-      # Updates the total cost
-      self._acc_cost += step_cost
       # Updates the position
       self._pos = p_f
 
   def __repr__(self):
-    return '[name: {}, position: {}, is_assigned: {}, path: {}, acc_cost:{}]'.format(self._name, self._pos, self.is_assigned(), self._path, self._acc_cost)
+    return '[name: {}, position: {}, is_assigned: {}, path: {}]'.format(self._name, self._pos, self.is_assigned(), self._path)
 
 if __name__ == "__main__":
   ROWS=4
@@ -67,5 +60,4 @@ if __name__ == "__main__":
     agent.tick(w)
     print('Iter {}: agent position: {}'.format(i, agent.pos()))
     i += 1
-  print('Agent total cost: {}'.format(agent.cost()))
 

@@ -1,8 +1,9 @@
 import numpy as np
 import random
+import math
 
 def create_tasks_arrivals(n_tasks=10, beta=1.):
-  return sorted([np.random.exponential(beta) for i in range(0, n_tasks)])
+  return sorted([math.ceil(np.random.exponential(beta)) for i in range(0, n_tasks)])
 
 def sample_nodes(nodes):
   return random.sample(nodes, 1)

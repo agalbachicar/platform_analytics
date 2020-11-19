@@ -38,14 +38,31 @@ class Warehouse:
   def node_capacity(self, name):
     return self._graph.nodes[name]['available_capacity']
 
+  def clear_edges_occupancy(self):
+    for e in self._graph.edges:
+      self._graph.edges[e]['occupancy'] = 0
+
+  def increase_edge_occupancy(self, edge):
+    self._graph.edges[edge]['occupancy'] = self._graph.edges[edge]['occupancy'] + 1
+
+  def decrease_edge_occupancy(self, edge):
+    e = self._graph.edges[edge]
+    e['occupancy'] = max(0, e['occupancy'] - 1)
+
+  def path_cost(self, path):
+    cost = 0
+    for i in range(0, len(path)-1):
+      cost += self.get_edge_cost(path[i], path[i+1])
+    return cost
+
   def plot(self):
     plt.figure()
     pos = {node_name: Warehouse._get_node_index(node_name) for node_name in self._graph.nodes}
     nx.draw(self._graph, pos=pos, with_labels=True, font_weight='bold')
     plt.show()
 
-  def get_edge_weight(self, n_i, n_j):
-    return self._graph.edges[(n_i, n_j)]['weight']
+  def get_edge_cost(self, n_i, n_j):
+    return self._graph.edges[(n_i, n_j)]['weight'] + self._occupancy_cost * self._graph.edges[(n_i, n_j)]['occupancy']
 
   def _get_node_name(row, col):
     return '{}_{}'.format(row, col)

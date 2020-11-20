@@ -2,6 +2,9 @@ import networkx as nx
 from warehouse import Warehouse
 
 class Agent:
+  '''
+  Holds the behavior of an agent that would perform a task.
+  '''
   def __init__(self, name, pos):
     self._name = name
     self._pos = pos
@@ -14,6 +17,10 @@ class Agent:
     return self._pos
 
   def path_and_cost_to(self, node, w):
+    '''
+    Returns the path and the cost of going from its position to node given a 
+    Warehouse w.
+    '''
     class WeightFn:
       def __init__(self, w):
         self._w = w
@@ -24,15 +31,27 @@ class Agent:
     return path[1:], w.path_cost(path)
 
   def is_assigned(self):
+    '''
+    Returns True when it has nodes to cover from its assignment.
+    '''
     return False if not self._path else True
 
   def assign_mission(self, path):
+    '''
+    Sets a list of nodes to traverse.
+    '''
     self._path = path
 
   def next_move(self):
+    '''
+    Returns the next edge to traverse when it is assigned
+    '''
     return (self._pos, self._path[0]) if self.is_assigned() else None
 
   def tick(self, w):
+    '''
+    When it has an assignment, it moves to the next node.
+    '''
     if self.is_assigned():
       # Computes the step cost
       p_s = self._pos

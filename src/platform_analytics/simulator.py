@@ -20,13 +20,13 @@ class Simulator:
       self._task_arrivals.append([sample_nodes(nodes)] * x)
 
     self._processed_ticks = 0
-    self._operational_ticks = 0
+    self._only_wip_ticks = 0
 
   def processed_ticks(self):
     return self._processed_ticks
 
-  def operational_ticks(self):
-    return self._operational_ticks
+  def only_wip_ticks(self):
+    return self._only_wip_ticks
 
   def utilitarian_cost(self):
     return self._w_manager.cost()
@@ -40,9 +40,13 @@ class Simulator:
     while ( len(self._w_manager.assigned_agents()) > 0 or len(self._task_arrivals) > 0 or len(tasks_to_process) > 0 ):
       logging.debug('\t\tRunning the {}-th iteration.'.format(i))
       i += 1
-      # Pick tasks
+      # Pick new tasks and add those to the pool
       if self._task_arrivals:
         tasks_to_process = tasks_to_process + self._task_arrivals.pop(0)
+      else:
+        # When there are no more tasks but we still need to process.
+        self._only_wip_ticks += 1
+
       # Try to assign as many tasks as possible
       task_index = 0
       for task in tasks_to_process:
@@ -51,9 +55,6 @@ class Simulator:
           break
         task_index += 1
       tasks_to_process = tasks_to_process[task_index:]
-      # Increase the amount of operational ticks when there are assigned agents
-      if len(self._w_manager.assigned_agents()) > 0:
-        self._operational_ticks += 1
       # Tick the system
       self._w_manager.tick()
 

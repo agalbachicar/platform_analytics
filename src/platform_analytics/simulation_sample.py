@@ -212,7 +212,7 @@ def main():
     results[key] = dict()
     results[key]['cost'] = sim.utilitarian_cost()
     results[key]['processed_ticks'] = sim.processed_ticks()
-    results[key]['operational_ticks'] = sim.operational_ticks()
+    results[key]['only_wip_ticks'] = sim.only_wip_ticks()
     results[key]['average_path_length'] = average_path_length(sim.task_assingments())
 
   logging.info(results)

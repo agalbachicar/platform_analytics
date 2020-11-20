@@ -81,3 +81,62 @@ python simulation_sample.py
 
 And you will run several simulations. A file called `sim.log` will be generated
 with all the output.
+
+You should be able to see the log output of the simulations and their results.
+
+If you do:
+
+```sh
+cs src/platform_analytics
+python process_results.py
+```
+
+You'll be able to analyze in three pictures how metrics evolve for the different
+simulations
+
+## Results
+
+### Utilitarian cost
+
+This metric is the result of measuring the flow cost in the graph for each
+iteration. Result can be seen below:
+
+![Sample warehouse](/doc/img/utilitarian_cost_demand.png)
+
+The graph is split into two to separate by the number agents that were initially
+available. Elasticity is referred to the traffic, meaning that the more elastic
+the traffic is, the more sensible the cost and that aligns with the offsets in
+the curves. However, it is worth to mention that the bigger the mean of the
+Poisson lambda parameter is, the lower the utilitarian cost.
+
+Another important aspect of this graph is that the having more agents allows to
+get better routes option which reduces for all cases the global utilitarian
+cost.
+
+### Average path length
+
+This metric is the result of averaging all the path length (in number of nodes)
+assignments. Result can be seen below:
+
+![Sample warehouse](/doc/img/average_path_length_demand.png)
+
+Similarly as before, we can see two graphs that show two views of the data. The
+graph above shows the result for ten agents and the one below for twenty five
+agents. It is shown that the more sensible the path planning to the traffic is,
+the less impact in the average path it is perceived. Note that the slopes of the
+lines have a vertical offset between them. That can be explained because
+agents would try to avoid congestion and as a result would take alternative
+paths making them all more homogeneous.
+
+### Ticks processing remaining WIP
+
+Now we focus in the number of iterations after receiving all the demand the
+*manager* requires to assign *agents* to tasks because those were not dispatched
+and are part of a backlog.
+
+![Sample warehouse](/doc/img/tics_wip_demand.png)
+
+When the pool of *agents* is reduced, we can see that there is a significant
+impact in the extra time when the speed at which *tasks* are received increases.
+And that impacts more when the routing is less affected by traffic. If our fleet
+is bigger, the difference disappears. 

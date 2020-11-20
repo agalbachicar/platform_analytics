@@ -17,6 +17,7 @@ This project runs with:
 - networkx 2.5
 - numpy 1.17.2
 - matplotlib 3.1.1
+- pandas 0.25.1
 
 ## Code structure
 

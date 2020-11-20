@@ -6,6 +6,9 @@ from warehouse import Warehouse
 from task_creator import sample_nodes, set_seed
 
 class WarehouseManager:
+  '''
+  Manages a Warehouse and a set of Agents.
+  '''
   def __init__(self, w, n_agents=10):
     self._w = w
     self._utilitarian_cost = 0.
@@ -23,24 +26,59 @@ class WarehouseManager:
     self._task_assingments = []
 
   def warehouse(self):
+    '''
+    Returns the underlying warehouse.
+    '''
     return self._w
 
   def nodes(self):
+    '''
+    Returns the list of nodes in the warehouse.
+    '''
     return list(self._w.graph().nodes)
 
   def assigned_agents(self):
+    '''
+    Returns the list of assigned agents.
+    '''
     return self._assigned_agents
 
-  def task_assingments(self):
-    return self._task_assingments
-
   def unassigned_agents(self):
+    '''
+    Returns the list of unassigned agents.
+    '''
     return self._unassigned_agents
 
+  def task_assingments(self):
+    '''
+    Returns the list of task assignments in the form of (agent, path)
+    '''
+    return self._task_assingments
+
   def cost(self):
+    '''
+    Returns the utilitarian cost of the manager because of its assignment
+    decisions.
+    It is computed by accumulating the flow cost for each iteration.
+    '''
     return self._utilitarian_cost
 
   def process_task(self, task):
+    '''
+    Tries to process a task. When there are no available agents, it returns
+    False.
+
+    The assignment process follows:
+    - A task is a node in graph to which an unassigned agent will be
+      responsible.
+    - All unassigned agents are queried for their proposed path and the current
+      cost of that path.
+    - The manager assigns to the agent that proposed the path with the least 
+      cost the task.
+    - The agent is moved to the assigned list.
+    - The warehouse is updated because the of the new edge traffic in the next
+      iteration.
+    '''
     if not self._unassigned_agents:
       logging.debug('All agents are busy. Try next time...')
       return False
@@ -73,6 +111,11 @@ class WarehouseManager:
     return True
 
   def tick(self):
+    '''
+    Evolves all the assigned agents (unassigned agents will remain still).
+    Moves to the unassigned list those agents that finished their work.
+    Update the weights in the graph for the next iteration.
+    '''
     logging.debug('\t\tTicking agents...')
     for agent in self._assigned_agents:
       agent.tick(self._w)

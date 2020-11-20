@@ -179,7 +179,7 @@ SIMULATION_CASES = {
     'cols': 10,
     'edge_base_cost': 1.,
     'occupancy_cost': 1.,
-    'n_agents': 10,
+    'n_agents': 25,
     'n_tasks': 1000,
     'lam': 10,
   },

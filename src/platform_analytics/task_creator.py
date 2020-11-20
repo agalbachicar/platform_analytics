@@ -6,8 +6,22 @@ def set_seed(s=0):
   np.random.seed(s)
   random.seed(s)
 
-def create_tasks_arrivals(n_tasks=10, beta=1.):
-  return sorted([math.ceil(np.random.exponential(beta)) for i in range(0, n_tasks)])
+def create_tasks_arrivals(n_tasks=10, lam=1.):
+  '''
+  Returns a list of samples of a Poisson distribution with lambda = lam 
+  parameter. The summatory of the resulting vector is n_tasks
+  '''
+  result = []
+  acc_tasks = 0
+  while acc_tasks < n_tasks:
+    sample = np.random.poisson(lam=lam)
+    if acc_tasks + sample < n_tasks:
+      result.append(sample)
+    else:
+      # Yes, I know... the last sample is not Poisson...
+      result.append(acc_tasks + sample - n_tasks)
+    acc_tasks += result[-1]
+  return result
 
 def sample_nodes(nodes):
   return random.sample(nodes, 1)[0]

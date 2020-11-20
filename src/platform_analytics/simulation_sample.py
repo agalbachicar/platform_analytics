@@ -10,7 +10,7 @@ SIMULATION_CASES = {
     'occupancy_cost': 0.,
     'n_agents': 10,
     'n_tasks': 1000,
-    'beta': 10.
+    'lam': 5,
   },
   'si_a10_atf': {
     'description': 'Standard 10x10 grid map. Inelastic to traffic. Fast arrival time.',
@@ -20,7 +20,7 @@ SIMULATION_CASES = {
     'occupancy_cost': 0.,
     'n_agents': 10,
     'n_tasks': 1000,
-    'beta': 1
+    'lam': 1
   },
   'si_a10_ats': {
     'description': 'Standard 10x10 grid map. Inelastic to traffic. Slow task arrival time.',
@@ -30,7 +30,7 @@ SIMULATION_CASES = {
     'occupancy_cost': 0.,
     'n_agents': 10,
     'n_tasks': 1000,
-    'beta': 100.
+    'lam': 10,
   },
   'se_a10_atm': {
     'description': 'Standard 10x10 grid map. Elastic to traffic. 10 agents. Standard task arrival time.',
@@ -40,7 +40,7 @@ SIMULATION_CASES = {
     'occupancy_cost': 0.1,
     'n_agents': 10,
     'n_tasks': 1000,
-    'beta': 10.
+    'lam': 5,
   },
   'se_a10_atf': {
     'description': 'Standard 10x10 grid map. Elastic to traffic. Fast arrival time.',
@@ -50,7 +50,7 @@ SIMULATION_CASES = {
     'occupancy_cost': 0.1,
     'n_agents': 10,
     'n_tasks': 1000,
-    'beta': 1
+    'lam': 1
   },
   'se_a10_ats': {
     'description': 'Standard 10x10 grid map. Elastic to traffic. Slow task arrival time.',
@@ -60,7 +60,7 @@ SIMULATION_CASES = {
     'occupancy_cost': 0.1,
     'n_agents': 10,
     'n_tasks': 1000,
-    'beta': 100.
+    'lam': 10,
   },
   'sh_a10_atm': {
     'description': 'Standard 10x10 grid map. Highly elastic to traffic. 10 agents. Standard task arrival time.',
@@ -70,7 +70,7 @@ SIMULATION_CASES = {
     'occupancy_cost': 0.1,
     'n_agents': 10,
     'n_tasks': 1000,
-    'beta': 10.
+    'lam': 5,
   },
   'sh_a10_atf': {
     'description': 'Standard 10x10 grid map. Highly elastic to traffic. Fast arrival time.',
@@ -80,7 +80,7 @@ SIMULATION_CASES = {
     'occupancy_cost': 1.,
     'n_agents': 10,
     'n_tasks': 1000,
-    'beta': 1
+    'lam': 1
   },
   'sh_a10_ats': {
     'description': 'Standard 10x10 grid map. Highly elastic to traffic. Slow task arrival time.',
@@ -90,7 +90,7 @@ SIMULATION_CASES = {
     'occupancy_cost': 1.,
     'n_agents': 10,
     'n_tasks': 1000,
-    'beta': 100.
+    'lam': 10,
   },
 
   'si_a25_atm': {
@@ -101,7 +101,7 @@ SIMULATION_CASES = {
     'occupancy_cost': 0.,
     'n_agents': 25,
     'n_tasks': 1000,
-    'beta': 10.
+    'lam': 5,
   },
   'si_a25_atf': {
     'description': 'Standard 10x10 grid map. Inelastic to traffic. 25 agents. Fast arrival time.',
@@ -111,7 +111,7 @@ SIMULATION_CASES = {
     'occupancy_cost': 0.,
     'n_agents': 25,
     'n_tasks': 1000,
-    'beta': 1
+    'lam': 1
   },
   'si_a25_ats': {
     'description': 'Standard 10x10 grid map. Inelastic to traffic. 25 agents. Slow task arrival time.',
@@ -121,7 +121,7 @@ SIMULATION_CASES = {
     'occupancy_cost': 0.,
     'n_agents': 25,
     'n_tasks': 1000,
-    'beta': 100.
+    'lam': 10,
   },
   'se_a25_atm': {
     'description': 'Standard 10x10 grid map. Elastic to traffic. 25 agents. Standard task arrival time.',
@@ -131,7 +131,7 @@ SIMULATION_CASES = {
     'occupancy_cost': 0.1,
     'n_agents': 25,
     'n_tasks': 1000,
-    'beta': 10.
+    'lam': 5,
   },
   'se_a25_atf': {
     'description': 'Standard 10x10 grid map. Elastic to traffic. 25 agents. Fast arrival time.',
@@ -141,7 +141,7 @@ SIMULATION_CASES = {
     'occupancy_cost': 0.1,
     'n_agents': 25,
     'n_tasks': 1000,
-    'beta': 1
+    'lam': 1
   },
   'se_a25_ats': {
     'description': 'Standard 10x10 grid map. Elastic to traffic. 25 agents. Slow task arrival time.',
@@ -151,7 +151,7 @@ SIMULATION_CASES = {
     'occupancy_cost': 0.1,
     'n_agents': 25,
     'n_tasks': 1000,
-    'beta': 100.
+    'lam': 10,
   },
   'sh_a25_atm': {
     'description': 'Standard 10x10 grid map. Highly elastic to traffic. 25 agents. Standard task arrival time.',
@@ -161,7 +161,7 @@ SIMULATION_CASES = {
     'occupancy_cost': 0.1,
     'n_agents': 25,
     'n_tasks': 1000,
-    'beta': 10.
+    'lam': 5,
   },
   'sh_a25_atf': {
     'description': 'Standard 10x10 grid map. Highly elastic to traffic. 25 agents. Fast arrival time.',
@@ -171,7 +171,7 @@ SIMULATION_CASES = {
     'occupancy_cost': 1.,
     'n_agents': 25,
     'n_tasks': 1000,
-    'beta': 1
+    'lam': 1
   },
   'sh_a25_ats': {
     'description': 'Standard 10x10 grid map. Highly elastic to traffic. Slow task arrival time.',
@@ -181,7 +181,7 @@ SIMULATION_CASES = {
     'occupancy_cost': 1.,
     'n_agents': 10,
     'n_tasks': 1000,
-    'beta': 100.
+    'lam': 10,
   },
 }
 
@@ -200,11 +200,11 @@ def main():
     properties = SIMULATION_CASES[key]
     logging.info('Case: {}. Properties: {}'.format(key, properties))
 
-    # rows, cols, node_capacity=-1, edge_base_cost=1., occupancy_cost=0., n_agents=10, n_tasks=100, beta=1.
+    # rows, cols, node_capacity=-1, edge_base_cost=1., occupancy_cost=0., n_agents=10, n_tasks=100, lam=1.
     sim = Simulator(properties['rows'], properties['cols'],
                     properties['edge_base_cost'], properties['occupancy_cost'],
                     properties['n_agents'], properties['n_tasks'],
-                    properties['beta'])
+                    properties['lam'])
     logging.info('\tStarting simulation...')
     sim.run()
     logging.info('\tSimulation finished!')

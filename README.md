@@ -101,7 +101,7 @@ simulations
 This metric is the result of measuring the flow cost in the graph for each
 iteration. Result can be seen below:
 
-![Sample warehouse](/doc/img/utilitarian_cost_demand.png)
+![utilitarian_cost_demand](/doc/img/utilitarian_cost_demand.png)
 
 The graph is split into two to separate by the number agents that were initially
 available. Elasticity is referred to the traffic, meaning that the more elastic
@@ -118,7 +118,7 @@ cost.
 This metric is the result of averaging all the path length (in number of nodes)
 assignments. Result can be seen below:
 
-![Sample warehouse](/doc/img/average_path_length_demand.png)
+![average_path_length_demand](/doc/img/average_path_length_demand.png)
 
 Similarly as before, we can see two graphs that show two views of the data. The
 graph above shows the result for ten agents and the one below for twenty five
@@ -134,7 +134,7 @@ Now we focus in the number of iterations after receiving all the demand the
 *manager* requires to assign *agents* to tasks because those were not dispatched
 and are part of a backlog.
 
-![Sample warehouse](/doc/img/tics_wip_demand.png)
+![ticks_wip_demand](/doc/img/ticks_wip_demand.png)
 
 When the pool of *agents* is reduced, we can see that there is a significant
 impact in the extra time when the speed at which *tasks* are received increases.
